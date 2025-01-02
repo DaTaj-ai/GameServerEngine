@@ -1,0 +1,7 @@
+/nbproject/private/
+
+# Ignore build directory
+build/
+
+# Ignore dist directory
+dist/

@@ -1,35 +1,38 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gameserverengine;
 
+import gameserverengine.local.DataAccessLayer;
+import gameserverengine.models.ResponseModel;
+import gameserverengine.models.UserModel;
+import gameserverengine.utils.Consts;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-/**
- *
- * @author Taj
- */
 public class GameServerEngine extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
+        Parent root = new BorderPane();
         Scene scene = new Scene(root);
+        
+        stage.setTitle(Consts.APP_NAME);
+        Image image = new Image(getClass().getResource(Consts.APP_LOGO_PATH).toString());
+        stage.getIcons().add(image);
+        
+        UserModel user = new UserModel("abdo","kamel","abdokamel8886","12345678");
+        ResponseModel response  = DataAccessLayer.register(user);
+        
+        System.out.println("Status : "+response.getStatus());
+        System.out.println("Message : "+response.getMessage());
         
         stage.setScene(scene);
         stage.show();
+        
+        
     }
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         launch(args);
     }
