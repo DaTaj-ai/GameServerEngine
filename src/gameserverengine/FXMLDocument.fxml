@@ -1,14 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gameserverengine.FXMLDocumentController">
-    <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
-    </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
+         <image>
+            <Image url="@../background.jpg" />
+         </image>
+      </ImageView>
+      <GridPane prefHeight="400.0" prefWidth="600.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="294.0" minWidth="10.0" prefWidth="212.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="379.0" minWidth="10.0" prefWidth="195.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="252.0" minWidth="10.0" prefWidth="193.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="96.0" minHeight="10.0" prefHeight="96.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="152.0" minHeight="10.0" prefHeight="96.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="151.0" minHeight="10.0" prefHeight="118.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField style="-fx-background-radius: 10px; -fx-background-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets right="40.0" top="25.0" />
+               </GridPane.margin></TextField>
+            <TextField style="-fx-background-radius: 10px; -fx-background-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="25.0" right="40.0" />
+               </GridPane.margin></TextField>
+            <Label text="Ip" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="130.0" top="25.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Old English Text MT" size="34.0" />
+               </font>
+            </Label>
+            <Label prefHeight="40.0" prefWidth="105.0" style="-fx-background-radius: 10px;" text="Adress" GridPane.rowIndex="2">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets bottom="25.0" left="110.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Old English Text MT" size="34.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="75.0" style="-fx-background-radius: 10px; -fx-background-color: green;" text="Start" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets top="15.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="75.0" style="-fx-background-radius: 10px; -fx-background-color: red;" text="Stop" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="150.0" top="15.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <StackedBarChart style="-fx-background-radius: 10px;" GridPane.columnIndex="2" GridPane.rowIndex="1">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+               <padding>
+                  <Insets bottom="5.0" left="30.0" right="50.0" top="20.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets right="100.0" top="80.0" />
+               </GridPane.margin>
+            </StackedBarChart>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </GridPane>
+   </children>
 </AnchorPane>
