@@ -15,18 +15,18 @@ public class GameServerEngine extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = new BorderPane();
-        Scene scene = new Scene(root);
+        Parent root = new FXMLDocumentBase(stage);
+        Scene scene = new Scene(root,600,400);
         
         stage.setTitle(Consts.APP_NAME);
         Image image = new Image(getClass().getResource(Consts.APP_LOGO_PATH).toString());
         stage.getIcons().add(image);
         
-        UserModel user = new UserModel("abdo","kamel","abdokamel8886","12345678");
-        ResponseModel response  = DataAccessLayer.register(user);
+        //UserModel user = new UserModel("abdo","kamel","abdokamel8886","12345678");
+       // ResponseModel response  = DataAccessLayer.register(user);
         
-        System.out.println("Status : "+response.getStatus());
-        System.out.println("Message : "+response.getMessage());
+       // System.out.println("Status : "+response.getStatus());
+       // System.out.println("Message : "+response.getMessage());
         
         stage.setScene(scene);
         stage.show();
