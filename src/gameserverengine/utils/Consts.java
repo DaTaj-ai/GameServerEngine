@@ -18,4 +18,7 @@ public class Consts {
     
     static public final String REG_SUCCESS_MSG  = "Registration successful";
     static public final String REG_FAILED_MSG  = "Registration failed";
+    static public final String REG_FAILED_USER_EXIST_MSG  = "This username is already exist";
+    
+    static public final int DATABASE_UNIQUE_ERROR_CODE = 19;
 }
