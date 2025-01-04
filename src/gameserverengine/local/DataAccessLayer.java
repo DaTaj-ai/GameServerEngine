@@ -1,14 +1,12 @@
 package gameserverengine.local;
 
 import gameserverengine.interfaces.LocalDatabaseFunctions;
-import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
 import gameserverengine.utils.Consts;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DataAccessLayer implements LocalDatabaseFunctions {
@@ -45,8 +43,9 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
             }
             pst.close();
         } catch (SQLException ex) {
-            response = new ResponseModel(Consts.STATUS_FAILED, ex.getMessage());
-            response.setMessage("An error occurred: " + ex.getMessage());
+            String msg = ex.getErrorCode() == Consts.DATABASE_UNIQUE_ERROR_CODE? Consts.REG_FAILED_USER_EXIST_MSG :ex.getMessage() ;
+            System.err.println(ex.getErrorCode());
+            response.setMessage(msg);
         }
 
         return response;
