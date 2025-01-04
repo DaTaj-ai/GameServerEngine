@@ -10,7 +10,7 @@ public interface LocalDatabaseFunctions {
         return null;
     }
 
-    static UserModel getUser(String username){
+    static UserModel getUser(String userName){
         return null;
     }
 

@@ -1,6 +1,7 @@
 package gameserverengine;
 
 import gameserverengine.local.DataAccessLayer;
+import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
 import gameserverengine.utils.Consts;
@@ -23,7 +24,27 @@ public class GameServerEngine extends Application {
         stage.getIcons().add(image);
         
         //UserModel user = new UserModel("abdo","kamel","abdokamel8886","12345678");
-       // ResponseModel response  = DataAccessLayer.register(user);
+        //ResponseModel response  = DataAccessLayer.register(user);
+        
+        UserModel result = DataAccessLayer.getUser("abdokamel8886");
+        System.out.println(result.getFirstName() + "this is the first user name ");
+        System.out.println(result.getLastName());
+        System.out.println(result.getUserName());
+        
+        LoginResponseModel testLogin = DataAccessLayer.login("abdokamel8886" , "dkjhd");
+        System.out.println(testLogin.getStatus());
+        System.out.println(testLogin.getMessage());
+        
+        LoginResponseModel testLogin2 = DataAccessLayer.login("abdokamel8886" , "12345678");
+        System.out.println("this is number 2 \n"+testLogin2.getStatus());
+        System.out.println(testLogin2.getMessage());
+        
+        LoginResponseModel testLogin3 = DataAccessLayer.login("abdokael8886" , "dkjhd");
+        System.out.println(testLogin3.getStatus());
+        System.out.println(testLogin3.getMessage());
+        
+        
+        
         
        // System.out.println("Status : "+response.getStatus());
        // System.out.println("Message : "+response.getMessage());
