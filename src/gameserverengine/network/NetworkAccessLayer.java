@@ -7,8 +7,6 @@ import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.RequestModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
-import gameserverengine.utils.Consts;
-
 import java.io.*;
 import java.net.*;
 import java.util.logging.Level;
