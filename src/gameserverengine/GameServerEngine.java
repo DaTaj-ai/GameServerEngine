@@ -1,6 +1,7 @@
 package gameserverengine;
 
 import gameserverengine.local.DataAccessLayer;
+import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
 import gameserverengine.network.NetworkAccessLayer;
@@ -23,7 +24,8 @@ public class GameServerEngine extends Application {
         stage.setTitle(Consts.APP_NAME);
         Image image = new Image(getClass().getResource(Consts.APP_LOGO_PATH).toString());
         stage.getIcons().add(image);
-
+        
+      
         stage.setScene(scene);
         stage.show();
 

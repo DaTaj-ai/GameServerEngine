@@ -2,16 +2,16 @@ package gameserverengine.network;
 
 import gameserverengine.enums.RequestTypesEnum;
 import gameserverengine.local.DataAccessLayer;
+import gameserverengine.models.LoginRequestModel;
+import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.RequestModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
-import gameserverengine.utils.Consts;
-import gameserverengine.utils.JsonUtils;
-
 import java.io.*;
 import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import gameserverengine.utils.JsonUtils;
 
 public class NetworkAccessLayer {
 
@@ -70,7 +70,7 @@ class AuthHandler extends Thread {
                     register(request.getJsonData());
                 }
                 else if(request.getType()==RequestTypesEnum.LOGIN){
-                   // login(request.getJsonData()); login fun here
+                    login(request.getJsonData());
                 }
 
             }
@@ -89,7 +89,16 @@ class AuthHandler extends Thread {
         outputWriter.println(responseJson);
         System.out.println("Response sent to client as JSON: " + responseJson);
     }
+    private void login(String receivedJson) {
+        System.out.println("Deserialized UserModel: " + receivedJson);
+        LoginRequestModel user = JsonUtils.jsonToLoginRequestModel(receivedJson);    
+        LoginResponseModel response = DataAccessLayer.login(user.getUserName() , user.getPassword());
+        String responseJson = JsonUtils.responseModelToJson(response);
+        outputWriter.println(responseJson);
+        System.out.println("Response sent to client as JSON: " + responseJson);
+    }
 
+    
     private void closeConnection() {
         try {
             inputReader.close();
