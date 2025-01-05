@@ -17,7 +17,7 @@ public class GameServerEngine extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = new BorderPane();
+        Parent root = new FXMLDocumentBase(stage);
         Scene scene = new Scene(root);
 
         stage.setTitle(Consts.APP_NAME);
