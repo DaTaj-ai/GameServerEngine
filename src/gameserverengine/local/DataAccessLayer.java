@@ -102,5 +102,30 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
 
         return loginresponse;
     }
+    public static boolean setAvilableStatus(String username, int status) {
+        boolean isAvilable = false;
+        try {
+            String updateQuery = "UPDATE UsersTable SET isPlaying = ? WHERE userName = ?";
+            PreparedStatement updateStmnt = connection.prepareStatement(updateQuery);
+            updateStmnt.setInt(1, status);
+            updateStmnt.setString(2, username);
+            int rowsUpdated = updateStmnt.executeUpdate();
+            if (rowsUpdated > 0) {
+                isAvilable = true;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return isAvilable;
+    }
+    public static void setOnline(String username, int status) throws SQLException {
+        PreparedStatement stmnt = connection.prepareStatement("UPDATE USERTABLE SET isOnline = ? WHERE username = ?");
+        stmnt.setString(2, username);
+
+        if (status == Consts.OFFLINE) {
+            // call the function that set it to not avilable
+        }
+    }
 
 }
