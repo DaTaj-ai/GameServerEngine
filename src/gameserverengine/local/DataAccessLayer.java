@@ -48,7 +48,7 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
             }
             pst.close();
         } catch (SQLException ex) {
-            String msg = ex.getErrorCode() == Consts.DATABASE_UNIQUE_ERROR_CODE? Consts.REG_FAILED_USER_EXIST_MSG :ex.getMessage() ;
+            String msg = ex.getErrorCode() == Consts.DATABASE_UNIQUE_ERROR_CODE ? Consts.REG_FAILED_USER_EXIST_MSG : ex.getMessage();
             System.err.println(ex.getErrorCode());
             response.setMessage(msg);
         }
@@ -101,6 +101,15 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
         }
 
         return loginresponse;
+    }
+
+    public static void setOnline(String username, int status) throws SQLException {
+        PreparedStatement stmnt = connection.prepareStatement("UPDATE USERTABLE SET isOnline = ? WHERE username = ?");
+        stmnt.setString(2, username);
+
+        if (status == Consts.OFFLINE) {
+            // call the function that set it to not avilable
+        }
     }
 
 }
