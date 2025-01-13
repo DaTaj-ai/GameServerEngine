@@ -1,11 +1,13 @@
 package gameserverengine.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import gameserverengine.models.LoginRequestModel;
 import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.RequestModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
+import java.util.ArrayList;
 
 public class JsonUtils {
     
@@ -55,5 +57,12 @@ public class JsonUtils {
     // Convert JSON string to ResponseModel
     public static LoginResponseModel jsonToLoginResponseModel(String json) {
         return gson.fromJson(json, LoginResponseModel.class);
+    }
+        public static ArrayList<UserModel> jsonToUsersArray(String json) {
+        ArrayList<UserModel> users = gson.fromJson(json, new TypeToken<ArrayList<UserModel>>(){}.getType());
+        return users;
+    }
+        public static String usersArrayToJson(ArrayList<UserModel> users ) {
+        return gson.toJson(users);
     }
 }

@@ -1,11 +1,13 @@
 package gameserverengine;
 
 import gameserverengine.local.DataAccessLayer;
+import static gameserverengine.local.DataAccessLayer.getAvailablePlayer;
 import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
 import gameserverengine.network.NetworkAccessLayer;
 import gameserverengine.utils.Consts;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -30,6 +32,12 @@ public class GameServerEngine extends Application {
         stage.show();
 
         new Thread(() -> NetworkAccessLayer.startListen()).start();
+        
+        ArrayList<UserModel> list = getAvailablePlayer();
+        
+        for(UserModel user:list){
+            System.out.println(user.toString());
+        }
 
         stage.setOnCloseRequest((event) -> {
             System.out.println("Closing application...");
@@ -42,6 +50,7 @@ public class GameServerEngine extends Application {
 
     public static void main(String[] args) {
         launch(args);
+        
     }
 
     @Override
