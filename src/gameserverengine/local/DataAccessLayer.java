@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -128,8 +129,35 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
         }
     }
 
-    
+public static ArrayList<UserModel> getAvailablePlayer()
+{
+    ArrayList<UserModel> availablePlayer = new ArrayList();
+     
+        try {
+           UserModel player = new UserModel();
+            PreparedStatement stmnt = connection.prepareStatement("SELECT * from USERSTABLE WHERE isOnline = 1");
+            ResultSet result = stmnt.executeQuery();
+            
+            while(result.next())
+            {
+                player.setFirstName(result.getString("firstName"));
+                player.setLastName(result.getString("lastName"));
+                player.setIsOnline(result.getInt("isOnline"));
+                player.setIsplayingnow(result.getInt("isplayingnow"));
+                player.setGamesPlayed(result.getInt("GamesPlayed"));
+                player.setPassword(result.getString("password"));
+                player.setUserName(result.getString("userName"));
+                player.setScore(result.getInt("score"));
+                availablePlayer.add(player);
+                
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return availablePlayer;
+        
+}
 
- 
 
 }
