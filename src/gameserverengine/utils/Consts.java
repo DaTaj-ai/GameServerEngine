@@ -21,7 +21,7 @@ public class Consts {
     static public final String REG_FAILED_USER_EXIST_MSG  = "This username is already exist";
     
     static public final int DATABASE_UNIQUE_ERROR_CODE = 19;
-    
     static  public final int ONLINE=1;
     static public final  int OFFLINE=0;
+    
 }
