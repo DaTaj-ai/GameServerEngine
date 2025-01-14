@@ -134,12 +134,13 @@ public static ArrayList<UserModel> getOnlinePlayer()
     ArrayList<UserModel> availablePlayer = new ArrayList();
      
         try {
-           UserModel player = new UserModel();
+           
             PreparedStatement stmnt = connection.prepareStatement("SELECT * from USERSTABLE WHERE isOnline = 1");
             ResultSet result = stmnt.executeQuery();
             
             while(result.next())
             {
+                UserModel player = new UserModel();
                 player.setFirstName(result.getString("firstName"));
                 player.setLastName(result.getString("lastName"));
                 player.setIsOnline(result.getInt("isOnline"));

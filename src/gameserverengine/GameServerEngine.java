@@ -20,7 +20,7 @@ public class GameServerEngine extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = new FXMLDocumentBase(stage);
+        Parent root = new GameServerController(stage);
         Scene scene = new Scene(root);
 
         stage.setTitle(Consts.APP_NAME);
@@ -32,6 +32,11 @@ public class GameServerEngine extends Application {
         stage.show();
 
         new Thread(() -> NetworkAccessLayer.startListen()).start();
+        
+        ArrayList<UserModel> users = DataAccessLayer.getOnlinePlayer();
+        for(UserModel user : users){
+            System.out.println(user);
+        }
         
         stage.setOnCloseRequest((event) -> {
             System.out.println("Closing application...");

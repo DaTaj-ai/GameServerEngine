@@ -16,7 +16,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class FXMLDocumentBase extends AnchorPane {
+public class GameServerPage extends AnchorPane {
 
     protected final ImageView imageView;
     protected final GridPane gridPane;
@@ -38,7 +38,7 @@ public class FXMLDocumentBase extends AnchorPane {
     protected final Label PortTypeLabel;
     protected final Label label1;
 
-    public FXMLDocumentBase(Stage stage) {
+    public GameServerPage(Stage stage) {
 
         imageView = new ImageView();
         gridPane = new GridPane();
