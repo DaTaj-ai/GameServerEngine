@@ -8,6 +8,7 @@ import gameserverengine.models.RequestModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
 import java.util.ArrayList;
+import piratesproject.models.InvitationModel;
 
 public class JsonUtils {
     
@@ -64,5 +65,12 @@ public class JsonUtils {
     }
         public static String usersArrayToJson(ArrayList<UserModel> users ) {
         return gson.toJson(users);
+    }
+        public static String invitationModelToJson(InvitationModel invitationModel){
+        return gson.toJson(invitationModel); 
+    }
+    
+    public static InvitationModel jsonToInvitationModel (String invitationJson){
+        return gson.fromJson(invitationJson, InvitationModel.class);
     }
 }

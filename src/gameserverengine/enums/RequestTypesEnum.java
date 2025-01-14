@@ -4,6 +4,7 @@ public enum RequestTypesEnum {
     
     REGISTER,
     LOGIN,
-   USERSTABLE
+   USERSTABLE,
+    INVITATION   
     
 }
