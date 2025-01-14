@@ -128,7 +128,8 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
             // call the function that set it to not avilable
         }
     }
-public static ArrayList<UserModel> getAvailablePlayer()
+
+public static ArrayList<UserModel> getOnlinePlayer()
 {
     ArrayList<UserModel> availablePlayer = new ArrayList();
      
@@ -157,5 +158,6 @@ public static ArrayList<UserModel> getAvailablePlayer()
         return availablePlayer;
         
 }
+
 
 }

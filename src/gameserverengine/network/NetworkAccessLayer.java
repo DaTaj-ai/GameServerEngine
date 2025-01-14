@@ -12,6 +12,7 @@ import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import gameserverengine.utils.JsonUtils;
+import java.util.ArrayList;
 
 public class NetworkAccessLayer {
 
@@ -52,6 +53,7 @@ class AuthHandler extends Thread {
 
     public AuthHandler(Socket clientSocket) {
         try {
+            System.out.println("lodmcolsdmdsc");
             inputReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             outputWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true);
             this.start();
@@ -71,6 +73,10 @@ class AuthHandler extends Thread {
                 }
                 else if(request.getType()==RequestTypesEnum.LOGIN){
                     login(request.getJsonData());
+                }
+                 else if(request.getType()==RequestTypesEnum.USERSTABLE){
+                    sendOnlineUsers();
+                    
                 }
 
             }
@@ -96,6 +102,19 @@ class AuthHandler extends Thread {
         String responseJson = JsonUtils.responseModelToJson(response);
         outputWriter.println(responseJson);
         System.out.println("Response sent to client as JSON: " + responseJson);
+    }
+    private void sendOnlineUsers(){
+        ArrayList <UserModel> users= DataAccessLayer.getOnlinePlayer();
+        if(users!=null){
+        String arrayJson = JsonUtils.usersArrayToJson(users);
+        System.out.println(arrayJson);
+        outputWriter.println(arrayJson);
+        }
+        else{
+            System.out.println("no online users");
+        }
+        
+        
     }
 
     
