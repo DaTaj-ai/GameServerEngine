@@ -1,7 +1,6 @@
 package gameserverengine;
 
 import gameserverengine.local.DataAccessLayer;
-import static gameserverengine.local.DataAccessLayer.getAvailablePlayer;
 import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
@@ -15,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import static gameserverengine.local.DataAccessLayer.getOnlinePlayer;
 
 public class GameServerEngine extends Application {
 
@@ -33,12 +33,6 @@ public class GameServerEngine extends Application {
 
         new Thread(() -> NetworkAccessLayer.startListen()).start();
         
-        ArrayList<UserModel> list = getAvailablePlayer();
-        
-        for(UserModel user:list){
-            System.out.println(user.toString());
-        }
-
         stage.setOnCloseRequest((event) -> {
             System.out.println("Closing application...");
             NetworkAccessLayer.stop();
