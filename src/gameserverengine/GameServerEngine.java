@@ -31,12 +31,6 @@ public class GameServerEngine extends Application {
         stage.setScene(scene);
         stage.show();
 
-        new Thread(() -> NetworkAccessLayer.startListen()).start();
-        
-        ArrayList<UserModel> users = DataAccessLayer.getOnlinePlayer();
-        for(UserModel user : users){
-            System.out.println(user);
-        }
         
         stage.setOnCloseRequest((event) -> {
             System.out.println("Closing application...");

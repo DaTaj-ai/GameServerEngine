@@ -7,6 +7,7 @@ import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.RequestModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
+import gameserverengine.utils.Consts;
 import java.io.*;
 import java.net.*;
 import java.util.logging.Level;
@@ -21,10 +22,17 @@ public class NetworkAccessLayer {
 
     public static void startListen() {
         try {
-            serverSocket = new ServerSocket(1422);
-            System.out.println("Server started on port 1422...");
+            serverSocket = new ServerSocket(Consts.PORT);
+            System.out.println("Server started on port " + Consts.PORT + "...");
+
             while (running) {
-                new AuthHandler(serverSocket.accept());
+                try {
+                    new AuthHandler(serverSocket.accept());
+                } catch (IOException e) {
+                    if (running) { // Log only if not shutting down
+                        Logger.getLogger(NetworkAccessLayer.class.getName()).log(Level.SEVERE, null, e);
+                    }
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(NetworkAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
@@ -34,10 +42,10 @@ public class NetworkAccessLayer {
     }
 
     public static void stop() {
-        running = false;
+        running = false; // Set running to false to exit the loop
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
-                serverSocket.close();
+                serverSocket.close(); // Close the server socket
                 System.out.println("Server Stopped...");
             }
         } catch (IOException e) {
@@ -50,10 +58,11 @@ class AuthHandler extends Thread {
 
     private BufferedReader inputReader;
     private PrintWriter outputWriter;
+    private Socket clientSocket;
 
     public AuthHandler(Socket clientSocket) {
         try {
-            System.out.println("lodmcolsdmdsc");
+            this.clientSocket = clientSocket;
             inputReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             outputWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true);
             this.start();
@@ -120,8 +129,10 @@ class AuthHandler extends Thread {
     
     private void closeConnection() {
         try {
-            inputReader.close();
-            outputWriter.close();
+
+            if (inputReader != null) inputReader.close();
+            if (outputWriter != null) outputWriter.close();
+            if (clientSocket != null && !clientSocket.isClosed()) clientSocket.close();
         } catch (IOException ex) {
             Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
