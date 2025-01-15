@@ -1,20 +1,14 @@
 package gameserverengine;
 
-import gameserverengine.local.DataAccessLayer;
-import gameserverengine.models.LoginResponseModel;
-import gameserverengine.models.ResponseModel;
-import gameserverengine.models.UserModel;
+
 import gameserverengine.network.NetworkAccessLayer;
 import gameserverengine.utils.Consts;
-import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import static gameserverengine.local.DataAccessLayer.getOnlinePlayer;
 
 public class GameServerEngine extends Application {
 

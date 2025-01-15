@@ -2,12 +2,14 @@ package gameserverengine.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import gameserverengine.models.GameModel;
 import gameserverengine.models.LoginRequestModel;
 import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.RequestModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
 import java.util.ArrayList;
+import piratesproject.models.InvitationModel;
 
 public class JsonUtils {
     
@@ -64,5 +66,19 @@ public class JsonUtils {
     }
         public static String usersArrayToJson(ArrayList<UserModel> users ) {
         return gson.toJson(users);
+    }
+        public static String invitationModelToJson(InvitationModel invitationModel){
+        return gson.toJson(invitationModel); 
+    }
+    
+    public static InvitationModel jsonToInvitationModel (String invitationJson){
+        return gson.fromJson(invitationJson, InvitationModel.class);
+    }
+    public static String gameModelToJson(GameModel model){
+        return gson.toJson(model); 
+    }
+    
+    public static GameModel jsonToGameModel (String game){
+        return gson.fromJson(game, GameModel.class);
     }
 }

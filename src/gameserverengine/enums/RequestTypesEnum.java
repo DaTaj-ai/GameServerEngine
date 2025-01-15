@@ -4,6 +4,11 @@ public enum RequestTypesEnum {
     
     REGISTER,
     LOGIN,
-   USERSTABLE
+   USERSTABLE,
+    INVITATION,
+    START_SENDING,
+    RECIEVE_INVITATION,
+    CONFIRM_INVITATION,
+    CREATE_ROOM
     
 }
