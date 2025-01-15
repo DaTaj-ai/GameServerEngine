@@ -16,7 +16,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class FXMLDocumentBase extends AnchorPane {
+public class GameServerPage extends AnchorPane {
 
     protected final ImageView imageView;
     protected final GridPane gridPane;
@@ -38,7 +38,7 @@ public class FXMLDocumentBase extends AnchorPane {
     protected final Label PortTypeLabel;
     protected final Label label1;
 
-    public FXMLDocumentBase(Stage stage) {
+    public GameServerPage(Stage stage) {
 
         imageView = new ImageView();
         gridPane = new GridPane();
@@ -116,7 +116,7 @@ public class FXMLDocumentBase extends AnchorPane {
         label.setPrefWidth(151.0);
         label.setText("Ip Adress");
         GridPane.setMargin(label, new Insets(25.0, 0.0, 0.0, 140.0));
-        label.setFont(new Font("Old English Text MT", 34.0));
+        label.setFont(new Font("Old English Text MT", 30.0));
 
         GridPane.setRowIndex(label0, 2);
         label0.setPrefHeight(40.0);
@@ -125,7 +125,7 @@ public class FXMLDocumentBase extends AnchorPane {
         label0.setText("Port");
         label0.setOpaqueInsets(new Insets(0.0));
         GridPane.setMargin(label0, new Insets(0.0, 0.0, 50.0, 150.0));
-        label0.setFont(new Font("Old English Text MT", 34.0));
+        label0.setFont(new Font("Old English Text MT", 30.0));
 
         GridPane.setColumnIndex(hBox, 1);
         GridPane.setRowIndex(hBox, 3);
@@ -137,6 +137,7 @@ public class FXMLDocumentBase extends AnchorPane {
         button.setPrefWidth(195.0);
         button.setStyle("-fx-background-radius: 10px; -fx-background-color: green;");
         button.setText("Start");
+        button.setFont(new Font("Old English Text MT", 30.0));
         button.setTextFill(javafx.scene.paint.Color.WHITE);
         HBox.setMargin(button, new Insets(15.0, 0.0, 0.0, 0.0));
 
@@ -158,7 +159,7 @@ public class FXMLDocumentBase extends AnchorPane {
         ipAdress_label_type.setPrefHeight(40.0);
         ipAdress_label_type.setPrefWidth(169.0);
         ipAdress_label_type.setText("192.1.1..55");
-        ipAdress_label_type.setFont(new Font("Old English Text MT", 34.0));
+        ipAdress_label_type.setFont(new Font("Old English Text MT", 24.0));
         GridPane.setMargin(ipAdress_label_type, new Insets(25.0, 0.0, 0.0, 20.0));
 
         GridPane.setColumnIndex(PortTypeLabel, 1);
@@ -168,14 +169,14 @@ public class FXMLDocumentBase extends AnchorPane {
         PortTypeLabel.setStyle("-fx-background-radius: 10px;");
         PortTypeLabel.setText("192");
         PortTypeLabel.setOpaqueInsets(new Insets(0.0));
-        PortTypeLabel.setFont(new Font("Old English Text MT", 34.0));
+        PortTypeLabel.setFont(new Font("Old English Text MT", 30.0));
         GridPane.setMargin(PortTypeLabel, new Insets(0.0, 0.0, 50.0, 20.0));
         gridPane.setOpaqueInsets(new Insets(0.0));
 
         label1.setLayoutX(10.0);
         label1.setLayoutY(10.0);
         label1.setText("Ip");
-        label1.setFont(new Font("Old English Text MT", 34.0));
+        label1.setFont(new Font("Old English Text MT", 30.0));
 
         getChildren().add(imageView);
         gridPane.getColumnConstraints().add(columnConstraints);

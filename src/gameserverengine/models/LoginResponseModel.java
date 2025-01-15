@@ -1,5 +1,7 @@
 package gameserverengine.models;
 
+import piratesproject.models.ResponseModel;
+
 public class LoginResponseModel extends ResponseModel{
     
     private UserModel userModel ;

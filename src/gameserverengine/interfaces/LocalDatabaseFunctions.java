@@ -1,8 +1,8 @@
 package gameserverengine.interfaces;
 
 import gameserverengine.models.LoginResponseModel;
-import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
+import piratesproject.models.ResponseModel;
 
 public interface LocalDatabaseFunctions {
     
