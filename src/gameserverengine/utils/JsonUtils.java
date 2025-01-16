@@ -8,7 +8,7 @@ import gameserverengine.models.RequestModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
 import java.util.ArrayList;
-import piratesproject.models.InvitationModel;
+import gameserverengine.models.InvitationModel;
 
 public class JsonUtils {
     

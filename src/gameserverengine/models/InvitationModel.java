@@ -1,5 +1,5 @@
 
-package piratesproject.models;
+package gameserverengine.models;
 
 /**
  *

@@ -1,5 +1,6 @@
 package gameserverengine.network;
 
+import com.sun.javafx.util.Utils;
 import gameserverengine.enums.RequestTypesEnum;
 import gameserverengine.local.DataAccessLayer;
 import gameserverengine.models.LoginRequestModel;
@@ -12,13 +13,16 @@ import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import gameserverengine.utils.JsonUtils;
+import static gameserverengine.utils.JsonUtils.jsonToInvitationModel;
 import java.util.ArrayList;
+import java.util.jar.Attributes.Name;
+import gameserverengine.models.InvitationModel;
 
 public class NetworkAccessLayer {
 
     private static ServerSocket serverSocket;
     private static boolean running = true;
-
+    
     public static void startListen() {
         try {
             serverSocket = new ServerSocket(1422);
@@ -50,7 +54,7 @@ class AuthHandler extends Thread {
 
     private BufferedReader inputReader;
     private PrintWriter outputWriter;
-
+    private ArrayList<UserModel> users ;
     public AuthHandler(Socket clientSocket) {
         try {
             System.out.println("lodmcolsdmdsc");
@@ -66,6 +70,11 @@ class AuthHandler extends Thread {
     public void run() {
         try {
             String receivedJson = inputReader.readLine();
+          //  RequestModel rewuestModel =  JsonUtils.jsonToRequestModel(receivedJson); 
+          //  System.out.println(invitationModel);
+          
+          //         System.out.println(rewuestModel.getJsonData());
+                   
             if (receivedJson != null) {
                 RequestModel request = JsonUtils.jsonToRequestModel(receivedJson);
                 if (request.getType() == RequestTypesEnum.REGISTER) {
@@ -74,10 +83,9 @@ class AuthHandler extends Thread {
                     login(request.getJsonData());
                 } else if (request.getType() == RequestTypesEnum.USERSTABLE) {
                     sendOnlineUsers();
-                }else if(request.getType()== RequestTypesEnum.INVITATION){
+                } else if (request.getType() == RequestTypesEnum.INVITATION) {
                     reciveClientRequest(request.getJsonData());
                 }
-                
 
             }
         } catch (IOException ex) {
@@ -105,8 +113,8 @@ class AuthHandler extends Thread {
         System.out.println("Response sent to client as JSON: " + responseJson);
     }
 
-    private void sendOnlineUsers() {
-        ArrayList<UserModel> users = DataAccessLayer.getOnlinePlayer();
+    private ArrayList<UserModel> sendOnlineUsers() {
+        users = DataAccessLayer.getOnlinePlayer();
         if (users != null) {
             String arrayJson = JsonUtils.usersArrayToJson(users);
             System.out.println(arrayJson);
@@ -114,15 +122,31 @@ class AuthHandler extends Thread {
         } else {
             System.out.println("no online users");
         }
+        return users;
 
     }
-    
+
     public void reciveClientRequest(String receivedJson) {
-        System.out.println(receivedJson);
+         InvitationModel invitationModel = jsonToInvitationModel(receivedJson);
+        System.out.println(invitationModel.getFrom());
+        System.out.println(invitationModel.getTo());
+        findPlayerThatIsInvited(invitationModel);
     }
-    
-    
-
+public void findPlayerThatIsInvited(InvitationModel invitationModel) {
+    String invitedUser = invitationModel.getTo();
+    for (UserModel user : users) {
+        if (user.getUserName().equals(invitedUser)) {
+            sendInvitationToClient(invitationModel);
+            return;
+        }
+    }
+    System.out.println("User  " + invitedUser + " is not online.");
+}
+    public void sendInvitationToClient(InvitationModel invitationModel) {
+    String invitationJson = JsonUtils.invitationModelToJson(invitationModel);
+    outputWriter.println(invitationJson);
+    System.out.println("Invitation sent to client: " + invitationJson);
+}
     private void closeConnection() {
         try {
             inputReader.close();
@@ -132,5 +156,4 @@ class AuthHandler extends Thread {
         }
     }
 
-    
 }
