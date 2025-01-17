@@ -1,5 +1,6 @@
 package gameserverengine;
 
+import gameserverengine.local.DataAccessLayer;
 import gameserverengine.network.NetworkAccessLayer;
 import gameserverengine.utils.Consts;
 import gameserverengine.utils.NetworkHelper;
@@ -38,12 +39,13 @@ public class GameServerController extends GameServerPage {
     }
 
     private void startServer() {
-        updateGraph(10,3,7);
+        //updateGraph(10, 3, 7);
+        setgraphstate();
         SharedModel.setRunning(true);
         button.setText("Stop");
         button.setStyle("-fx-background-color:red ;");
         new Thread(() -> NetworkAccessLayer.startListen()).start();
-        
+
     }
 
     private void stopServer() {
@@ -67,24 +69,31 @@ public class GameServerController extends GameServerPage {
         series.setName("online");
         barChart.getData().add(series);
     }
-
+    public void setgraphstate(){
+        int online = DataAccessLayer.getOnlinePlayerCount();
+        int offline = DataAccessLayer.getOfflinePlayerCount();
+        int avalible = DataAccessLayer.getAvailblePlayerCount();
+        
+        updateGraph(online, offline, avalible);
+    }
+    
     public void updateGraph(int onlineCount, int offlineCount, int availableCount) {
-        if (!barChart.getData().isEmpty()) {
-            XYChart.Series<String, Float> series = (XYChart.Series<String, Float>) barChart.getData().get(0);
-            for (XYChart.Data<String, Float> data : series.getData()) {
-                switch (data.getXValue()) {
-                    case "Offline":
-                        data.setYValue((float) offlineCount);
-                        break;
-                    case "Online":
-                        data.setYValue((float) onlineCount);
-                        break;
-                    case "Available":
-                        data.setYValue((float) availableCount);
-                        break;
-                }
+
+        XYChart.Series<String, Float> series = (XYChart.Series<String, Float>) barChart.getData().get(0);
+        for (XYChart.Data<String, Float> data : series.getData()) {
+            switch (data.getXValue()) {
+                case "Offline":
+                    data.setYValue((float) offlineCount);
+                    break;
+                case "Online":
+                    data.setYValue((float) onlineCount);
+                    break;
+                case "Available":
+                    data.setYValue((float) availableCount);
+                    break;
             }
         }
+
     }
 
 }

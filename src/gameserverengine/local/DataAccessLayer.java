@@ -100,12 +100,13 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
                 loginresponse = new ResponseModel(Consts.STATUS_FAILED, "Check your password ");
             }
         } else {
-            
+
             loginresponse = new ResponseModel(Consts.STATUS_FAILED, "Check your Username or Create Account");
         }
 
         return loginresponse;
     }
+
     public static boolean setAvilableStatus(String username, int status) {
         boolean isAvilable = false;
         try {
@@ -123,26 +124,29 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
         }
         return isAvilable;
     }
-    public static void setOnline(String username, int status) throws SQLException {
-        PreparedStatement stmnt = connection.prepareStatement("UPDATE USERTABLE SET isOnline = ? WHERE username = ?");
-        stmnt.setString(2, username);
 
-        if (status == Consts.OFFLINE) {
-            // call the function that set it to not avilable
+    public static void setOnline(String username, int status) throws SQLException {
+        if (status == 1) {
+            PreparedStatement stmnt = connection.prepareStatement("UPDATE USERTABLE SET isOnline = 1 WHERE username = ?");
+            stmnt.setString(1, username);
+            stmnt.executeQuery();
+        }
+        else if (status == 0){
+            PreparedStatement stmnt = connection.prepareStatement("UPDATE USERTABLE SET isOnline = 0 WHERE username = ?");
+            stmnt.setString(1, username);
+            stmnt.executeQuery();
         }
     }
 
-public static ArrayList<UserModel> getOnlinePlayer()
-{
-    ArrayList<UserModel> availablePlayer = new ArrayList();
-     
+    public static ArrayList<UserModel> getOnlinePlayer() {
+        ArrayList<UserModel> availablePlayer = new ArrayList();
+
         try {
-           
+
             PreparedStatement stmnt = connection.prepareStatement("SELECT * from USERSTABLE WHERE isOnline = 1");
             ResultSet result = stmnt.executeQuery();
-            
-            while(result.next())
-            {
+
+            while (result.next()) {
                 UserModel player = new UserModel();
                 player.setFirstName(result.getString("firstName"));
                 player.setLastName(result.getString("lastName"));
@@ -153,15 +157,65 @@ public static ArrayList<UserModel> getOnlinePlayer()
                 player.setUserName(result.getString("userName"));
                 player.setScore(result.getInt("score"));
                 availablePlayer.add(player);
-                
+
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return availablePlayer;
-        
-}
 
+    }
+
+    public static int getOnlinePlayerCount() {
+        int count = 0;
+        try {
+
+            PreparedStatement stmnt = connection.prepareStatement("SELECT * from USERSTABLE WHERE isOnline = 1");
+            ResultSet result = stmnt.executeQuery();
+
+            while (result.next()) {
+                count++;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return count;
+    }
+
+    public static int getOfflinePlayerCount() {
+        int count = 0;
+        try {
+
+            PreparedStatement stmnt = connection.prepareStatement("SELECT * From USERSTABLE WHERE isOnline != 1 ");
+            ResultSet result = stmnt.executeQuery();
+
+            while (result.next()) {
+                count++;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return count;
+    }
+
+    public static int getAvailblePlayerCount() {
+        int count = 0;
+        try {
+
+            PreparedStatement stmnt = connection.prepareStatement("SELECT * from USERSTABLE WHERE isOnline = 1 AND isplayingnow != 1 ");
+            ResultSet result = stmnt.executeQuery();
+
+            while (result.next()) {
+                count++;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return count;
+    }
 
 }
