@@ -18,3 +18,9 @@
 .data2.chart-bar {
     -fx-bar-fill: #6aa6c3 /* Third bar: blue */
 }
+
+.chart-legend-item {
+    -fx-text-fill: black;
+    -fx-font-size: 18px; /* Adjust size of legend text */
+}
+
