@@ -9,6 +9,7 @@ import gameserverengine.models.Player;
 import gameserverengine.models.RequestModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
+import gameserverengine.utils.Consts;
 import gameserverengine.utils.JsonUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -31,7 +33,6 @@ public class AuthHandler extends Thread {
 
     public static Vector<AuthHandler> clientsVector = new Vector<AuthHandler>();
 
-//    public static Vector<GameRoomModel> games = new Vector<GameRoomModel>();
     public AuthHandler(Socket clientSocket) {
         try {
             this.clientSocket = clientSocket;
@@ -61,8 +62,11 @@ public class AuthHandler extends Thread {
                         reciveClientRequest(request.getJsonData());
                     } else if (request.getType() == RequestTypesEnum.CONFIRM_INVITATION) {
                         startGame(request.getJsonData());
+
                     } else if (request.getType() == RequestTypesEnum.GAMEMOVE) {
                         sendMove(request.getJsonData());
+                    } else if (request.getType() == RequestTypesEnum.EXIT) {
+                        removeConnection();
                     }
 
                 }
@@ -92,6 +96,12 @@ public class AuthHandler extends Thread {
         outputWriter.println(responseJson);
         System.out.println("Response sent to client as JSON: " + responseJson);
         threadOwner = user.getUserName();
+        try {
+              String userName = user.getUserName() ; 
+              DataAccessLayer.setOnline(userName, Consts.ONLINE);
+        } catch (SQLException ex) {
+            Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void sendOnlineUsers() {
@@ -115,18 +125,34 @@ public class AuthHandler extends Thread {
     }
 
     public void sendInvitation(InvitationModel invitation) {
+        System.out.println(JsonUtils.invitationModelToJson(invitation));
         for (AuthHandler handler : clientsVector) {
             if (handler.getThreadOwner().equals(invitation.getTo())) {
                 ResponseModel response = new ResponseModel(1, "invitation", invitation.getFrom(),
                         RequestTypesEnum.RECIEVE_INVITATION);
                 String responseJson = JsonUtils.responseModelToJson(response);
                 handler.outputWriter.println(responseJson);
+                System.out.println("7777777777");
                 break;
             }
         }
     }
 
+    public void removeConnection() {
+        try {
+            System.out.println("User : "+threadOwner+" logged out !!");
+            clientsVector.remove(this);
+            this.stop();
+            outputWriter.close();
+            inputReader.close();
+            clientSocket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private void sendMove(String receivedJson) {
+        System.out.println("333333333333");
         System.out.println(receivedJson);
         GameModel move = JsonUtils.jsonToGameModel(receivedJson);
         String selectedUserName = move.getUsername();
@@ -135,7 +161,7 @@ public class AuthHandler extends Thread {
         ResponseModel response = new ResponseModel(1, "", data, RequestTypesEnum.GAMEMOVE);
         String responseJson = JsonUtils.responseModelToJson(response);
         handler.outputWriter.println(responseJson);
-
+        
     }
 
     public void startGame(String receivedJson) {
