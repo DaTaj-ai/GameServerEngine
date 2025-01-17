@@ -1,0 +1,20 @@
+.chart {
+    -fx-font-size: 30px; /* Adjust font size globally if needed */
+    -fx-text-fill: white;
+}
+
+.chart-bar {
+    -fx-bar-fill: blue; /* Default bar color */
+}
+
+.data0.chart-bar {
+    -fx-bar-fill: #dbdfdf; 
+}
+
+.data1.chart-bar {
+    -fx-bar-fill: #33FF57; 
+}
+
+.data2.chart-bar {
+    -fx-bar-fill: #6aa6c3 /* Third bar: blue */
+}
