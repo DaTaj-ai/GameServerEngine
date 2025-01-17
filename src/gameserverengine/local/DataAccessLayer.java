@@ -5,6 +5,7 @@ import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
 import gameserverengine.utils.Consts;
+import gameserverengine.utils.JsonUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -85,20 +86,22 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
         return resultUser;
     }
 
-    public static LoginResponseModel login(String username, String password) {
+    public static ResponseModel login(String username, String password) {
 
-        LoginResponseModel loginresponse = null;
+        ResponseModel loginresponse = null;
         UserModel resultUser = getUser(username);
 
         if (resultUser != null) {
             String localUserPassword = resultUser.getPassword();
             if (password.equals(resultUser.getPassword())) {
-                loginresponse = new LoginResponseModel(Consts.STATUS_SUCCESS, "Congratulations User loged in!", resultUser);
+                String json = JsonUtils.userModelToJson(resultUser);
+                loginresponse = new ResponseModel(Consts.STATUS_SUCCESS, "Congratulations User loged in!", json);
             } else {
-                loginresponse = new LoginResponseModel(Consts.STATUS_FAILED, "Check your password ", resultUser);
+                loginresponse = new ResponseModel(Consts.STATUS_FAILED, "Check your password ");
             }
         } else {
-            loginresponse = new LoginResponseModel(Consts.STATUS_FAILED, "Check your Username or Create Account", resultUser);
+            
+            loginresponse = new ResponseModel(Consts.STATUS_FAILED, "Check your Username or Create Account");
         }
 
         return loginresponse;
@@ -134,12 +137,13 @@ public static ArrayList<UserModel> getOnlinePlayer()
     ArrayList<UserModel> availablePlayer = new ArrayList();
      
         try {
-           UserModel player = new UserModel();
+           
             PreparedStatement stmnt = connection.prepareStatement("SELECT * from USERSTABLE WHERE isOnline = 1");
             ResultSet result = stmnt.executeQuery();
             
             while(result.next())
             {
+                UserModel player = new UserModel();
                 player.setFirstName(result.getString("firstName"));
                 player.setLastName(result.getString("lastName"));
                 player.setIsOnline(result.getInt("isOnline"));

@@ -3,6 +3,8 @@ package gameserverengine.utils;
 public class Consts {
     
     final static public String DATABASE_URL = "jdbc:sqlite:./database/DB.sqlite";
+    final static public String LOCAL_IP = "127.0.0.1";
+    final static public int PORT = 1422;
     
     static public final String APP_NAME = "Mind Storm Server";
     static public final String APP_LOGO_PATH = "/gameserverengine/drawable/images/app_logo.png";

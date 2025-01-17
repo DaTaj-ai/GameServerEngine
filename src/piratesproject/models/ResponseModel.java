@@ -1,6 +1,5 @@
-package gameserverengine.models;
+package piratesproject.models;
 
-import gameserverengine.enums.RequestTypesEnum;
 import java.io.Serializable;
 
 public class ResponseModel implements Serializable {
@@ -8,7 +7,6 @@ public class ResponseModel implements Serializable {
     private int status;
     private String message;
     private String Data;
-    private RequestTypesEnum type;
 
     public ResponseModel() {
     }
@@ -29,24 +27,6 @@ public class ResponseModel implements Serializable {
         this.message = message;
         this.Data = Data;
     }
-
-    public ResponseModel(int status, String message, String Data, RequestTypesEnum type) {
-        this.status = status;
-        this.message = message;
-        this.Data = Data;
-        this.type = type;
-    }
-    
-    
-
-    public RequestTypesEnum getType() {
-        return type;
-    }
-
-    public void setType(RequestTypesEnum type) {
-        this.type = type;
-    }
-    
     
 
     public int getStatus() {
