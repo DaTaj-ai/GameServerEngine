@@ -3,6 +3,8 @@ package gameserverengine.enums;
 public enum RequestTypesEnum {
     
     REGISTER,
-    LOGIN
+    LOGIN,
+   USERSTABLE,
+    INVITATION   
     
 }
