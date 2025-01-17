@@ -38,7 +38,7 @@ public class GameServerController extends GameServerPage {
     }
 
     private void startServer() {
-        updateGraph(5,8,4);
+        updateGraph(10,3,7);
         SharedModel.setRunning(true);
         button.setText("Stop");
         button.setStyle("-fx-background-color:red ;");
@@ -64,7 +64,7 @@ public class GameServerController extends GameServerPage {
         series.getData().add(new XYChart.Data("Offline", onlineCount));
         series.getData().add(new XYChart.Data("Online", offlineCount));
         series.getData().add(new XYChart.Data("Available", availableCount));
-        series.setName("Server status");
+        series.setName("online");
         barChart.getData().add(series);
     }
 

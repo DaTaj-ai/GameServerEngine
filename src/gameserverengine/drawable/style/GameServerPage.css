@@ -4,23 +4,24 @@
 }
 
 .chart-bar {
-    -fx-bar-fill: blue; /* Default bar color */
+    -fx-bar-fill: #33FF57; /* Default bar color */
 }
 
 .data0.chart-bar {
-    -fx-bar-fill: #dbdfdf; 
+    -fx-bar-fill: #dbdfdf; /*offline */
 }
 
 .data1.chart-bar {
-    -fx-bar-fill: #33FF57; 
+-fx-bar-fill: #33FF57; /*online */
 }
 
 .data2.chart-bar {
-    -fx-bar-fill: #6aa6c3 /* Third bar: blue */
+    -fx-bar-fill: #6aa6c3 /* Availble*/
 }
 
 .chart-legend-item {
     -fx-text-fill: black;
-    -fx-font-size: 18px; /* Adjust size of legend text */
+    -fx-font-size: 20px; /* Adjust size of legend text */
+    
 }
 
