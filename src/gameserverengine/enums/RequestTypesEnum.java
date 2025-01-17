@@ -10,6 +10,7 @@ public enum RequestTypesEnum {
     RECIEVE_INVITATION,
     CONFIRM_INVITATION,
     CREATE_ROOM,
-    EXIT
+    EXIT,
+    GAMEMOVE
     
 }

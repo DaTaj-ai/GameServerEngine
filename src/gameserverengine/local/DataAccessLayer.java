@@ -132,6 +132,7 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
         }
     }
 
+
 public static ArrayList<UserModel> getOnlinePlayer()
 {
     ArrayList<UserModel> availablePlayer = new ArrayList();
