@@ -150,6 +150,14 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
         System.out.println("updated inshaalah");
 
     }
+    public static void updatePassword(String username, String password) throws SQLException {
+        PreparedStatement stmnt = connection.prepareStatement("UPDATE USERSTABLE SET password = ? where username = ? ");
+        stmnt.setString(1, password);
+        stmnt.setString(2, username);
+        stmnt.executeUpdate();
+        System.out.println("updated inshaalah");
+
+    }
      public static void updateGamesPlayed(String username ,Integer numberOfPlayedGames) throws SQLException{
         PreparedStatement stmnt = connection.prepareStatement("UPDATE USERSTABLE SET GamesPlayed  = ? where username = ? ");
         stmnt.setInt(1, numberOfPlayedGames);
