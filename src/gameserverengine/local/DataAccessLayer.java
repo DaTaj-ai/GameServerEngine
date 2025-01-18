@@ -139,9 +139,11 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
         
     }
     public static void updateScore(String username ,Integer score) throws SQLException{
-        PreparedStatement stmnt = connection.prepareStatement("UPDATE USERSTABLE SET SCORE = ? where username = ");
+        PreparedStatement stmnt = connection.prepareStatement("UPDATE USERSTABLE SET SCORE = ? where username = ? ");
         stmnt.setInt(1, score);
         stmnt.setString(2, username);
+        stmnt.executeUpdate();
+        System.out.println("updated inshaalah");
         
         
     }
