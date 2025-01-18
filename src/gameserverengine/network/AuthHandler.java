@@ -83,6 +83,7 @@ public class AuthHandler extends Thread {
                         try {
                             int score = parseInt(request.getJsonData());
                             DataAccessLayer.updateScore(threadOwner, score);
+                            broadcast();
                            
                } catch (SQLException ex) {
                            ex.printStackTrace();
@@ -107,6 +108,13 @@ public class AuthHandler extends Thread {
         System.out.println("Response sent to client as JSON: " + responseJson);
         threadOwner = user.getUserName();
         GameServerController.setgraphstate();
+        try {
+            
+            DataAccessLayer.setOnline(threadOwner, Consts.ONLINE);
+            broadcast();
+        } catch (SQLException ex) {
+            Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void login(String receivedJson) {
@@ -121,8 +129,9 @@ public class AuthHandler extends Thread {
         Stage stage = null;
         GameServerController.setgraphstate();
         try {
-            String userName = user.getUserName();
-            DataAccessLayer.setOnline(userName, Consts.ONLINE);
+            
+            DataAccessLayer.setOnline(threadOwner, Consts.ONLINE);
+            broadcast();
         } catch (SQLException ex) {
             Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -202,6 +211,7 @@ public class AuthHandler extends Thread {
             outputWriter.close();
             inputReader.close();
             clientSocket.close();
+            broadcast();
         } catch (IOException ex) {
             Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -275,6 +285,7 @@ public class AuthHandler extends Thread {
     private void setAvalible(String receivedJson) {
         int value = Integer.parseInt(receivedJson);
         DataAccessLayer.setAvilableStatus(threadOwner, value);
+        broadcast();
         GameServerController.setgraphstate();
         
     }
