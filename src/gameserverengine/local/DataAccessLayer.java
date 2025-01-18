@@ -75,6 +75,8 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
                 String userFirstName = rs.getString("firstName");
                 String userLastName = rs.getString("lastName");
                 String resultUserName = rs.getString("userName");
+                int Score = rs.getInt("score");
+                int gamePlayed = rs.getInt("GamesPlayed");
                 String userPasswor = rs.getString("password");
                 resultUser = new UserModel(userFirstName, userLastName, resultUserName, userPasswor);
             }
@@ -124,21 +126,21 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
         }
         return isAvilable;
     }
-   
+
     public static void setOnline(String username, int status) throws SQLException {
         if (status == 1) {
             PreparedStatement stmnt = connection.prepareStatement("UPDATE UsersTable SET isOnline = 1 WHERE username = ?");
             stmnt.setString(1, username);
             stmnt.executeUpdate();
-        }
-        else if (status == 0){
+        } else if (status == 0) {
             PreparedStatement stmnt = connection.prepareStatement("UPDATE UsersTable SET isOnline = 0 WHERE username = ?");
             stmnt.setString(1, username);
             stmnt.executeUpdate();
         }
-        
+
     }
-    public static void updateScore(String username ,Integer score) throws SQLException{
+
+    public static void updateScore(String username, Integer score) throws SQLException {
         PreparedStatement stmnt = connection.prepareStatement("UPDATE USERSTABLE SET SCORE = ? where username = ? ");
         stmnt.setInt(1, score);
         stmnt.setString(2, username);
