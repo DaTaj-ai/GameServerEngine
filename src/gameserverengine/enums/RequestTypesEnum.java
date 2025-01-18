@@ -13,7 +13,8 @@ public enum RequestTypesEnum {
     EXIT,
     GAMEMOVE,
     UPDATESCORE,
-    AVALIBALE
+    AVALIBALE,
+    UPDATEGAMEPLAYED
 
     
 }
