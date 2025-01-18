@@ -72,6 +72,7 @@ public class AuthHandler extends Thread {
                     } else if (request.getType() == RequestTypesEnum.EXIT) {
                         try {
                             DataAccessLayer.setOnline(threadOwner, 0);
+                            broadcast();
                         } catch (SQLException ex) {
                            ex.printStackTrace();
                         }
@@ -103,18 +104,21 @@ public class AuthHandler extends Thread {
         System.out.println("Deserialized UserModel: " + user.getUserName());
         AuthHandler.clientsVector.add(this);
         ResponseModel response = DataAccessLayer.register(user);
-        String responseJson = JsonUtils.responseModelToJson(response);
-        outputWriter.println(responseJson);
-        System.out.println("Response sent to client as JSON: " + responseJson);
-        threadOwner = user.getUserName();
-        GameServerController.setgraphstate();
-        try {
+        if(response.getStatus()==Consts.STATUS_SUCCESS){
+             try {
             
             DataAccessLayer.setOnline(threadOwner, Consts.ONLINE);
             broadcast();
         } catch (SQLException ex) {
             Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+        }
+        String responseJson = JsonUtils.responseModelToJson(response);
+        outputWriter.println(responseJson);
+        System.out.println("Response sent to client as JSON: " + responseJson);
+        threadOwner = user.getUserName();
+        GameServerController.setgraphstate();
+       
     }
 
     private void login(String receivedJson) {
