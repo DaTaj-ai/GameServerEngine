@@ -86,6 +86,17 @@ public class AuthHandler extends Thread {
                         try {
                             int numberOfGames = parseInt(request.getJsonData());
                             DataAccessLayer.updateGamesPlayed(threadOwner, numberOfGames);
+                           
+
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }
+                    else if (request.getType() == RequestTypesEnum.UPDATEPASSSWORD) {
+                        try {
+                            String newPass = request.getJsonData();
+                            DataAccessLayer.updatePassword(threadOwner, newPass);
                             broadcast();
 
                         } catch (SQLException ex) {
