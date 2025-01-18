@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import static java.lang.Integer.parseInt;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -75,6 +76,16 @@ public class AuthHandler extends Thread {
                            ex.printStackTrace();
                         }
                         removeConnection();
+                    }
+                    else if (request.getType() == RequestTypesEnum.UPDATESCORE) {
+                        try {
+                            int score = parseInt(request.getJsonData());
+                            DataAccessLayer.updateScore(threadOwner, score);
+                           
+               } catch (SQLException ex) {
+                           ex.printStackTrace();
+                        }
+                        
                     }
 
                 }
