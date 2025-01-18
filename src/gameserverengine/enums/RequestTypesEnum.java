@@ -12,6 +12,8 @@ public enum RequestTypesEnum {
     CREATE_ROOM,
     EXIT,
     GAMEMOVE,
-    UPDATESCORE
+    UPDATESCORE,
+    AVALIBALE
+
     
 }

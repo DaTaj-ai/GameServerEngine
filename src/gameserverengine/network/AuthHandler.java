@@ -76,6 +76,8 @@ public class AuthHandler extends Thread {
                            ex.printStackTrace();
                         }
                         removeConnection();
+                    } else if (request.getType() == RequestTypesEnum.AVALIBALE) {
+                        setAvalible(request.getJsonData());
                     }
                     else if (request.getType() == RequestTypesEnum.UPDATESCORE) {
                         try {
@@ -104,6 +106,7 @@ public class AuthHandler extends Thread {
         outputWriter.println(responseJson);
         System.out.println("Response sent to client as JSON: " + responseJson);
         threadOwner = user.getUserName();
+        GameServerController.setgraphstate();
     }
 
     private void login(String receivedJson) {
@@ -116,8 +119,7 @@ public class AuthHandler extends Thread {
         System.out.println("Response sent to client as JSON: " + responseJson);
         threadOwner = user.getUserName();
         Stage stage = null;
-        GameServerController gameServerController = new GameServerController(stage);
-        gameServerController.setgraphstate();
+        GameServerController.setgraphstate();
         try {
             String userName = user.getUserName();
             DataAccessLayer.setOnline(userName, Consts.ONLINE);
@@ -138,6 +140,20 @@ public class AuthHandler extends Thread {
             System.out.println("no online users");
         }
     }
+    private String broadCastOnlineUsers() {
+        ArrayList<UserModel> users = DataAccessLayer.getOnlinePlayer();
+      
+        String responseJson=null;
+        if (users != null) {
+            String arrayJson = JsonUtils.usersArrayToJson(users);
+            ResponseModel response = new ResponseModel(1, "", arrayJson, RequestTypesEnum.USERSTABLE);
+           responseJson = JsonUtils.responseModelToJson(response);
+            
+        } else {
+            System.out.println("no online users");
+        }
+        return responseJson;
+    }
 
     public void reciveClientRequest(String receivedJson) {
         ResponseModel response = new ResponseModel(1, "start send", "", RequestTypesEnum.START_SENDING);
@@ -146,19 +162,6 @@ public class AuthHandler extends Thread {
         sendInvitation(JsonUtils.jsonToInvitationModel(receivedJson));
     }
 
-//    public void sendInvitation(InvitationModel invitation) {
-//        System.out.println(JsonUtils.invitationModelToJson(invitation));
-//        for (AuthHandler handler : clientsVector) {
-//            if (handler.getThreadOwner().equals(invitation.getTo())) {
-//                ResponseModel response = new ResponseModel(1, "invitation", invitation.getFrom(),
-//                        RequestTypesEnum.RECIEVE_INVITATION);
-//                String responseJson = JsonUtils.responseModelToJson(response);
-//                handler.outputWriter.println(responseJson);
-//                System.out.println("7777777777");
-//                break;
-//            }
-//        }
-//    }
     public AuthHandler findRecipientHandler(String recipient) {
         for (AuthHandler handler : clientsVector) {
             if (handler.getThreadOwner().equals(recipient)) {
@@ -191,13 +194,17 @@ public class AuthHandler extends Thread {
 
     public void removeConnection() {
         try {
+            DataAccessLayer.setOnline(threadOwner, 0);
             System.out.println("User : " + threadOwner + " logged out !!");
+            GameServerController.setgraphstate();
             clientsVector.remove(this);
             this.stop();
             outputWriter.close();
             inputReader.close();
             clientSocket.close();
         } catch (IOException ex) {
+            Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -237,6 +244,12 @@ public class AuthHandler extends Thread {
         }
         return null;
     }
+     private void broadcast() {
+        for (AuthHandler handler : clientsVector) {
+            handler.outputWriter.println(broadCastOnlineUsers());
+        }
+        
+    }
 
     public String getThreadOwner() {
         return threadOwner;
@@ -259,4 +272,10 @@ public class AuthHandler extends Thread {
         }
     }
 
+    private void setAvalible(String receivedJson) {
+        int value = Integer.parseInt(receivedJson);
+        DataAccessLayer.setAvilableStatus(threadOwner, value);
+        GameServerController.setgraphstate();
+        
+    }
 }
