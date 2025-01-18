@@ -102,8 +102,8 @@ public class AuthHandler extends Thread {
         GameServerController gameServerController = new GameServerController(stage);
         gameServerController.setgraphstate();
         try {
-              String userName = user.getUserName() ; 
-              DataAccessLayer.setOnline(userName, Consts.ONLINE);
+            String userName = user.getUserName();
+            DataAccessLayer.setOnline(userName, Consts.ONLINE);
         } catch (SQLException ex) {
             Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -129,23 +129,52 @@ public class AuthHandler extends Thread {
         sendInvitation(JsonUtils.jsonToInvitationModel(receivedJson));
     }
 
+//    public void sendInvitation(InvitationModel invitation) {
+//        System.out.println(JsonUtils.invitationModelToJson(invitation));
+//        for (AuthHandler handler : clientsVector) {
+//            if (handler.getThreadOwner().equals(invitation.getTo())) {
+//                ResponseModel response = new ResponseModel(1, "invitation", invitation.getFrom(),
+//                        RequestTypesEnum.RECIEVE_INVITATION);
+//                String responseJson = JsonUtils.responseModelToJson(response);
+//                handler.outputWriter.println(responseJson);
+//                System.out.println("7777777777");
+//                break;
+//            }
+//        }
+//    }
+    public AuthHandler findRecipientHandler(String recipient) {
+        for (AuthHandler handler : clientsVector) {
+            if (handler.getThreadOwner().equals(recipient)) {
+                return handler;
+            }
+        }
+        return null;
+    }
+
     public void sendInvitation(InvitationModel invitation) {
         System.out.println(JsonUtils.invitationModelToJson(invitation));
-        for (AuthHandler handler : clientsVector) {
-            if (handler.getThreadOwner().equals(invitation.getTo())) {
-                ResponseModel response = new ResponseModel(1, "invitation", invitation.getFrom(),
-                        RequestTypesEnum.RECIEVE_INVITATION);
-                String responseJson = JsonUtils.responseModelToJson(response);
-                handler.outputWriter.println(responseJson);
-                System.out.println("7777777777");
-                break;
-            }
+
+        AuthHandler recipientHandler = findRecipientHandler(invitation.getTo());
+        if (recipientHandler != null) {
+            ResponseModel response = new ResponseModel(
+                    1,
+                    "invitation",
+                    invitation.getFrom(),
+                    RequestTypesEnum.RECIEVE_INVITATION
+            );
+
+            String responseJson = JsonUtils.responseModelToJson(response);
+            recipientHandler.outputWriter.println(responseJson);
+
+            System.out.println("Invitation sent successfully.");
+        } else {
+            System.out.println("Recipient not found.");
         }
     }
 
     public void removeConnection() {
         try {
-            System.out.println("User : "+threadOwner+" logged out !!");
+            System.out.println("User : " + threadOwner + " logged out !!");
             clientsVector.remove(this);
             this.stop();
             outputWriter.close();
@@ -166,7 +195,7 @@ public class AuthHandler extends Thread {
         ResponseModel response = new ResponseModel(1, "", data, RequestTypesEnum.GAMEMOVE);
         String responseJson = JsonUtils.responseModelToJson(response);
         handler.outputWriter.println(responseJson);
-        
+
     }
 
     public void startGame(String receivedJson) {
