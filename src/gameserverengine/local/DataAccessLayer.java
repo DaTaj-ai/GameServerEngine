@@ -79,6 +79,8 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
                 int gamePlayed = rs.getInt("GamesPlayed");
                 String userPasswor = rs.getString("password");
                 resultUser = new UserModel(userFirstName, userLastName, resultUserName, userPasswor);
+                resultUser.setGamesPlayed(gamePlayed);
+                resultUser.setScore(Score);
             }
 
         } catch (SQLException ex) {

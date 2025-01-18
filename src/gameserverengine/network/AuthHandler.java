@@ -103,7 +103,9 @@ public class AuthHandler extends Thread {
                             ex.printStackTrace();
                         }
 
-                    }
+                    }else if (request.getType() == RequestTypesEnum.CANCEL_INVITATION) {
+                       cancelInvitation(request.getJsonData());
+                    } 
 
                 }
             } catch (IOException ex) {
@@ -228,12 +230,12 @@ public class AuthHandler extends Thread {
             DataAccessLayer.setOnline(threadOwner, 0);
             System.out.println("User : " + threadOwner + " logged out !!");
             GameServerController.setgraphstate();
-            clientsVector.remove(this);
+            broadcast();
+            clientsVector.remove(this);  
             this.stop();
             outputWriter.close();
             inputReader.close();
-            clientSocket.close();
-            broadcast();
+            clientSocket.close();     
         } catch (IOException ex) {
             Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -264,10 +266,12 @@ public class AuthHandler extends Thread {
         String game = JsonUtils.gameRoomModelToJson(model);
         ResponseModel response = new ResponseModel(1, "", game, RequestTypesEnum.CREATE_ROOM);
         String responseJson = JsonUtils.responseModelToJson(response);
-        DataAccessLayer.setAvilableStatus(user1, 0);
-        DataAccessLayer.setAvilableStatus(user2, 0);
+        DataAccessLayer.setAvilableStatus(user1, 1);
+        DataAccessLayer.setAvilableStatus(user2, 1);
+        GameServerController.setgraphstate();
         h1.outputWriter.println(responseJson);
         h2.outputWriter.println(responseJson);
+        broadcast();
     }
 
     private AuthHandler getHandlerByOwner(String username) {
@@ -313,5 +317,13 @@ public class AuthHandler extends Thread {
         broadcast();
         GameServerController.setgraphstate();
 
+    }
+    
+    private void cancelInvitation(String receivedJson){
+        System.out.println("hello"+receivedJson);
+         AuthHandler handler = getHandlerByOwner(receivedJson);
+          ResponseModel response = new ResponseModel(1, "", "", RequestTypesEnum.SEND_CANCEL_INVITATION);
+        String responseJson = JsonUtils.responseModelToJson(response);
+        handler.outputWriter.println(responseJson);
     }
 }

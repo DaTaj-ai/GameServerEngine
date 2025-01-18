@@ -1,10 +1,10 @@
 package gameserverengine.enums;
 
 public enum RequestTypesEnum {
-    
+
     REGISTER,
     LOGIN,
-   USERSTABLE,
+    USERSTABLE,
     INVITATION,
     START_SENDING,
     RECIEVE_INVITATION,
@@ -14,7 +14,8 @@ public enum RequestTypesEnum {
     GAMEMOVE,
     UPDATESCORE,
     AVALIBALE,
-    UPDATEGAMEPLAYED
+    UPDATEGAMEPLAYED,
+    CANCEL_INVITATION,
+    SEND_CANCEL_INVITATION
 
-    
 }
