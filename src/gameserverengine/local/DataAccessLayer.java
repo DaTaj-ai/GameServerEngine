@@ -5,6 +5,7 @@ import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
 import gameserverengine.utils.Consts;
+import gameserverengine.utils.JsonUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -131,7 +132,7 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
 
 public static ArrayList<UserModel> getOnlinePlayer()
 {
-    ArrayList<UserModel> availablePlayer = new ArrayList();
+    ArrayList<UserModel> availablePlayer = new ArrayList<UserModel>();
      
         try {
            UserModel player = new UserModel();
@@ -149,9 +150,10 @@ public static ArrayList<UserModel> getOnlinePlayer()
                 player.setUserName(result.getString("userName"));
                 player.setScore(result.getInt("score"));
                 availablePlayer.add(player);
+                System.out.println("from data access "+ player.getFirstName() );
                 
             }
-            
+//            System.out.println("from data access " );
         } catch (SQLException ex) {
             Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
         }
