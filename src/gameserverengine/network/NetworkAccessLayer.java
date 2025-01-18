@@ -1,60 +1,58 @@
 package gameserverengine.network;
 
-import gameserverengine.enums.RequestTypesEnum;
-import gameserverengine.local.DataAccessLayer;
-import gameserverengine.models.GameRoomModel;
-import gameserverengine.models.LoginRequestModel;
-import gameserverengine.models.LoginResponseModel;
-import gameserverengine.models.RequestModel;
-import gameserverengine.models.ResponseModel;
-import gameserverengine.models.UserModel;
-import gameserverengine.utils.Consts;
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import gameserverengine.utils.JsonUtils;
-import java.util.ArrayList;
-import java.util.Vector;
-import piratesproject.models.InvitationModel;
 
 public class NetworkAccessLayer {
 
     private static ServerSocket serverSocket;
-    private static boolean running = true;
+    private static volatile boolean running = true; // Ensure thread-safe access
+    public static final Vector<AuthHandler> clientsVector = new Vector<>(); // Manage connected clients
 
     public static void startListen() {
         try {
-            serverSocket = new ServerSocket(Consts.PORT);
-            System.out.println("Server started on port " + Consts.PORT + "...");
+            serverSocket = new ServerSocket(1422);
+            System.out.println("Server started on port 1422...");
 
             while (running) {
                 try {
-                    new AuthHandler(serverSocket.accept());
+                    AuthHandler handler = new AuthHandler(serverSocket.accept());
+                    synchronized (clientsVector) {
+                        clientsVector.add(handler);
+                    }
                 } catch (IOException e) {
-                    if (running) { // Log only if not shutting down
-                        Logger.getLogger(NetworkAccessLayer.class.getName()).log(Level.SEVERE, null, e);
+                    if (running) {
+                        Logger.getLogger(NetworkAccessLayer.class.getName()).log(Level.SEVERE, "Error accepting connection", e);
                     }
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(NetworkAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NetworkAccessLayer.class.getName()).log(Level.SEVERE, "Server failed to start", ex);
         } finally {
             stop();
         }
     }
 
     public static void stop() {
-        running = false; // Set running to false to exit the loop
+        running = false;
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
-                serverSocket.close(); // Close the server socket
-                System.out.println("Server Stopped...");
+                serverSocket.close();
             }
+
+            synchronized (clientsVector) {
+                for (AuthHandler handler : clientsVector) {
+                    handler.removeConnection();
+                }
+                clientsVector.clear();
+            }
+
+            System.out.println("Server stopped...");
         } catch (IOException e) {
-            Logger.getLogger(NetworkAccessLayer.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(NetworkAccessLayer.class.getName()).log(Level.SEVERE, "Error stopping server", e);
         }
     }
 }
-
-
