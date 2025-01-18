@@ -5,6 +5,7 @@ import gameserverengine.models.LoginResponseModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
 import gameserverengine.utils.Consts;
+import gameserverengine.utils.JsonUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -85,24 +86,27 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
         return resultUser;
     }
 
-    public static LoginResponseModel login(String username, String password) {
+    public static ResponseModel login(String username, String password) {
 
-        LoginResponseModel loginresponse = null;
+        ResponseModel loginresponse = null;
         UserModel resultUser = getUser(username);
 
         if (resultUser != null) {
             String localUserPassword = resultUser.getPassword();
             if (password.equals(resultUser.getPassword())) {
-                loginresponse = new LoginResponseModel(Consts.STATUS_SUCCESS, "Congratulations User loged in!", resultUser);
+                String json = JsonUtils.userModelToJson(resultUser);
+                loginresponse = new ResponseModel(Consts.STATUS_SUCCESS, "Congratulations User loged in!", json);
             } else {
-                loginresponse = new LoginResponseModel(Consts.STATUS_FAILED, "Check your password ", resultUser);
+                loginresponse = new ResponseModel(Consts.STATUS_FAILED, "Check your password ");
             }
         } else {
-            loginresponse = new LoginResponseModel(Consts.STATUS_FAILED, "Check your Username or Create Account", resultUser);
+
+            loginresponse = new ResponseModel(Consts.STATUS_FAILED, "Check your Username or Create Account");
         }
 
         return loginresponse;
     }
+
     public static boolean setAvilableStatus(String username, int status) {
         boolean isAvilable = false;
         try {
@@ -120,26 +124,31 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
         }
         return isAvilable;
     }
-    public static void setOnline(String username, int status) throws SQLException {
-        PreparedStatement stmnt = connection.prepareStatement("UPDATE USERTABLE SET isOnline = ? WHERE username = ?");
-        stmnt.setString(2, username);
 
-        if (status == Consts.OFFLINE) {
-            // call the function that set it to not avilable
+    public static void setOnline(String username, int status) throws SQLException {
+        if (status == 1) {
+            PreparedStatement stmnt = connection.prepareStatement("UPDATE UsersTable SET isOnline = 1 WHERE username = ?");
+            stmnt.setString(1, username);
+            stmnt.executeUpdate();
         }
+        else if (status == 0){
+            PreparedStatement stmnt = connection.prepareStatement("UPDATE UsersTable SET isOnline = 0 WHERE username = ?");
+            stmnt.setString(1, username);
+            stmnt.executeUpdate();
+        }
+        
     }
 
-public static ArrayList<UserModel> getOnlinePlayer()
-{
-    ArrayList<UserModel> availablePlayer = new ArrayList();
-     
+    public static ArrayList<UserModel> getOnlinePlayer() {
+        ArrayList<UserModel> availablePlayer = new ArrayList();
+
         try {
-           UserModel player = new UserModel();
+
             PreparedStatement stmnt = connection.prepareStatement("SELECT * from USERSTABLE WHERE isOnline = 1");
             ResultSet result = stmnt.executeQuery();
-            
-            while(result.next())
-            {
+
+            while (result.next()) {
+                UserModel player = new UserModel();
                 player.setFirstName(result.getString("firstName"));
                 player.setLastName(result.getString("lastName"));
                 player.setIsOnline(result.getInt("isOnline"));
@@ -149,15 +158,65 @@ public static ArrayList<UserModel> getOnlinePlayer()
                 player.setUserName(result.getString("userName"));
                 player.setScore(result.getInt("score"));
                 availablePlayer.add(player);
-                
+
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return availablePlayer;
-        
-}
 
+    }
+
+    public static int getOnlinePlayerCount() {
+        int count = 0;
+        try {
+
+            PreparedStatement stmnt = connection.prepareStatement("SELECT * from USERSTABLE WHERE isOnline = 1");
+            ResultSet result = stmnt.executeQuery();
+
+            while (result.next()) {
+                count++;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return count;
+    }
+
+    public static int getOfflinePlayerCount() {
+        int count = 0;
+        try {
+
+            PreparedStatement stmnt = connection.prepareStatement("SELECT * From USERSTABLE WHERE isOnline != 1 ");
+            ResultSet result = stmnt.executeQuery();
+
+            while (result.next()) {
+                count++;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return count;
+    }
+
+    public static int getAvailblePlayerCount() {
+        int count = 0;
+        try {
+
+            PreparedStatement stmnt = connection.prepareStatement("SELECT * from USERSTABLE WHERE isOnline = 1 AND isplayingnow != 1 ");
+            ResultSet result = stmnt.executeQuery();
+
+            while (result.next()) {
+                count++;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return count;
+    }
 
 }

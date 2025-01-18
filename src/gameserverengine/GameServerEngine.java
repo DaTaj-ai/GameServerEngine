@@ -1,26 +1,20 @@
 package gameserverengine;
 
-import gameserverengine.local.DataAccessLayer;
-import gameserverengine.models.LoginResponseModel;
-import gameserverengine.models.ResponseModel;
-import gameserverengine.models.UserModel;
+
 import gameserverengine.network.NetworkAccessLayer;
 import gameserverengine.utils.Consts;
-import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import static gameserverengine.local.DataAccessLayer.getOnlinePlayer;
 
 public class GameServerEngine extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = new FXMLDocumentBase(stage);
+        Parent root = new GameServerController(stage);
         Scene scene = new Scene(root);
 
         stage.setTitle(Consts.APP_NAME);
@@ -31,7 +25,6 @@ public class GameServerEngine extends Application {
         stage.setScene(scene);
         stage.show();
 
-        new Thread(() -> NetworkAccessLayer.startListen()).start();
         
         stage.setOnCloseRequest((event) -> {
             System.out.println("Closing application...");
@@ -51,5 +44,6 @@ public class GameServerEngine extends Application {
     public void stop() {
         NetworkAccessLayer.stop();
     }
+    
 
 }

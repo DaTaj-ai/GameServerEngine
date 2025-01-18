@@ -1,6 +1,7 @@
 package gameserverengine.network;
 
 import gameserverengine.enums.RequestTypesEnum;
+import gameserverengine.interfaces.LocalDatabaseFunctions;
 import gameserverengine.local.DataAccessLayer;
 import gameserverengine.models.LoginRequestModel;
 import gameserverengine.models.LoginResponseModel;
@@ -46,91 +47,3 @@ public class NetworkAccessLayer {
     }
 }
 
-class AuthHandler extends Thread {
-
-    private BufferedReader inputReader;
-    private PrintWriter outputWriter;
-
-    public AuthHandler(Socket clientSocket) {
-        try {
-            System.out.println("lodmcolsdmdsc");
-            inputReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            outputWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true);
-            this.start();
-        } catch (IOException ex) {
-            Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @Override
-    public void run() {
-        try {
-            String receivedJson = inputReader.readLine();
-            if (receivedJson != null) {
-                RequestModel request = JsonUtils.jsonToRequestModel(receivedJson);
-                if (request.getType() == RequestTypesEnum.REGISTER) {
-                    register(request.getJsonData());
-                } else if (request.getType() == RequestTypesEnum.LOGIN) {
-                    login(request.getJsonData());
-                } else if (request.getType() == RequestTypesEnum.USERSTABLE) {
-                    sendOnlineUsers();
-                }else if(request.getType()== RequestTypesEnum.INVITATION){
-                    reciveClientRequest(request.getJsonData());
-                }
-                
-
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closeConnection();
-        }
-    }
-
-    private void register(String receivedJson) {
-        UserModel user = JsonUtils.jsonToUserModel(receivedJson);
-        System.out.println("Deserialized UserModel: " + user.getUserName());
-        ResponseModel response = DataAccessLayer.register(user);
-        String responseJson = JsonUtils.responseModelToJson(response);
-        outputWriter.println(responseJson);
-        System.out.println("Response sent to client as JSON: " + responseJson);
-    }
-
-    private void login(String receivedJson) {
-        System.out.println("Deserialized UserModel: " + receivedJson);
-        LoginRequestModel user = JsonUtils.jsonToLoginRequestModel(receivedJson);
-        LoginResponseModel response = DataAccessLayer.login(user.getUserName(), user.getPassword());
-        String responseJson = JsonUtils.responseModelToJson(response);
-        outputWriter.println(responseJson);
-        System.out.println("Response sent to client as JSON: " + responseJson);
-    }
-
-    private void sendOnlineUsers() {
-        ArrayList<UserModel> users = DataAccessLayer.getOnlinePlayer();
-        if (users != null) {
-            String arrayJson = JsonUtils.usersArrayToJson(users);
-            System.out.println(arrayJson);
-            outputWriter.println(arrayJson);
-        } else {
-            System.out.println("no online users");
-        }
-
-    }
-    
-    public void reciveClientRequest(String receivedJson) {
-        System.out.println(receivedJson);
-    }
-    
-    
-
-    private void closeConnection() {
-        try {
-            inputReader.close();
-            outputWriter.close();
-        } catch (IOException ex) {
-            Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    
-}

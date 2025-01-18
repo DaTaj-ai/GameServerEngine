@@ -2,8 +2,11 @@ package gameserverengine.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import gameserverengine.models.GameModel;
+import gameserverengine.models.GameRoomModel;
 import gameserverengine.models.LoginRequestModel;
 import gameserverengine.models.LoginResponseModel;
+import gameserverengine.models.MoveModel;
 import gameserverengine.models.RequestModel;
 import gameserverengine.models.ResponseModel;
 import gameserverengine.models.UserModel;
@@ -72,5 +75,28 @@ public class JsonUtils {
     
     public static InvitationModel jsonToInvitationModel (String invitationJson){
         return gson.fromJson(invitationJson, InvitationModel.class);
+    }
+    public static String gameModelToJson(GameModel model){
+        return gson.toJson(model); 
+    }
+    
+    public static GameModel jsonToGameModel (String game){
+        return gson.fromJson(game, GameModel.class);
+    }
+    
+    public static String moveModelToJson(MoveModel model){
+        return gson.toJson(model); 
+    }
+    
+    public static MoveModel jsonToMoveModel (String move){
+        return gson.fromJson(move, MoveModel.class);
+    }
+    
+    public static String gameRoomModelToJson(GameRoomModel model){
+        return gson.toJson(model); 
+    }
+    
+    public static GameRoomModel jsonToGameRoomModel(String game){
+        return gson.fromJson(game, GameRoomModel.class);
     }
 }
