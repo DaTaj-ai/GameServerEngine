@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 
 public class GameServerController extends GameServerPage {
 
+    private static XYChart.Series<String, Float> series;
     public GameServerController(Stage stage) {
         initView();
     }
@@ -62,14 +63,14 @@ public class GameServerController extends GameServerPage {
         int offlineCount = 0;
         int availableCount = 0;
 
-        XYChart.Series<String, Float> series = new XYChart.Series<>();
+        series = new XYChart.Series<>();
         series.getData().add(new XYChart.Data("Offline", onlineCount));
         series.getData().add(new XYChart.Data("Online", offlineCount));
         series.getData().add(new XYChart.Data("Available", availableCount));
         series.setName("online");
         barChart.getData().add(series);
     }
-    public void setgraphstate(){
+    public static void setgraphstate(){
         int online = DataAccessLayer.getOnlinePlayerCount();
         int offline = DataAccessLayer.getOfflinePlayerCount();
         int avalible = DataAccessLayer.getAvailblePlayerCount();
@@ -77,9 +78,9 @@ public class GameServerController extends GameServerPage {
         updateGraph(online, offline, avalible);
     }
     
-    public void updateGraph(int onlineCount, int offlineCount, int availableCount) {
+    public static void updateGraph(int onlineCount, int offlineCount, int availableCount) {
 
-        XYChart.Series<String, Float> series = (XYChart.Series<String, Float>) barChart.getData().get(0);
+        series = (XYChart.Series<String, Float>) barChart.getData().get(0);
         for (XYChart.Data<String, Float> data : series.getData()) {
             switch (data.getXValue()) {
                 case "Offline":

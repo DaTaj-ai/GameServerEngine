@@ -89,6 +89,7 @@ public class AuthHandler extends Thread {
         outputWriter.println(responseJson);
         System.out.println("Response sent to client as JSON: " + responseJson);
         threadOwner = user.getUserName();
+        GameServerController.setgraphstate();
     }
 
     private void login(String receivedJson) {
@@ -101,8 +102,7 @@ public class AuthHandler extends Thread {
         System.out.println("Response sent to client as JSON: " + responseJson);
         threadOwner = user.getUserName();
         Stage stage = null;
-        GameServerController gameServerController = new GameServerController(stage);
-        gameServerController.setgraphstate();
+        GameServerController.setgraphstate();
         try {
             String userName = user.getUserName();
             DataAccessLayer.setOnline(userName, Consts.ONLINE);
@@ -165,6 +165,7 @@ public class AuthHandler extends Thread {
         try {
             DataAccessLayer.setOnline(threadOwner, 0);
             System.out.println("User : " + threadOwner + " logged out !!");
+            GameServerController.setgraphstate();
             clientsVector.remove(this);
             this.stop();
             outputWriter.close();
@@ -236,6 +237,7 @@ public class AuthHandler extends Thread {
 
     private void setAvalible(String receivedJson) {
         int value = Integer.parseInt(receivedJson);
-        DataAccessLayer.setAvilableStatus(threadOwner,value);
+        DataAccessLayer.setAvilableStatus(threadOwner, value);
+        GameServerController.setgraphstate();
     }
 }

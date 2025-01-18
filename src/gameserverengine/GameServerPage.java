@@ -22,9 +22,9 @@ public abstract class GameServerPage extends AnchorPane {
     protected final Button button;
     protected final Label PortTypeLabel;
     protected final Label label0;
-    protected final CategoryAxis categoryAxis;
-    protected final NumberAxis numberAxis;
-    protected final BarChart barChart;
+    protected static CategoryAxis categoryAxis;
+    protected static NumberAxis numberAxis;
+    protected static BarChart barChart;
 
     public GameServerPage() {
 
