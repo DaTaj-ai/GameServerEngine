@@ -146,14 +146,12 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
         System.out.println("updated inshaalah");
 
     }
-     public static void updateGamePlayed(String username ,Integer numberOfPlayedGames) throws SQLException{
+     public static void updateGamesPlayed(String username ,Integer numberOfPlayedGames) throws SQLException{
         PreparedStatement stmnt = connection.prepareStatement("UPDATE USERSTABLE SET GamesPlayed  = ? where username = ? ");
         stmnt.setInt(1, numberOfPlayedGames);
         stmnt.setString(2, username);
         stmnt.executeUpdate();
-        System.out.println("updated inshaalah");
-
-    }
+        System.out.println("updated inshaalah");}
 
     public static ArrayList<UserModel> getOnlinePlayer() {
         ArrayList<UserModel> availablePlayer = new ArrayList();

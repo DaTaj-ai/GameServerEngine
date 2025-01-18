@@ -70,12 +70,7 @@ public class AuthHandler extends Thread {
                     } else if (request.getType() == RequestTypesEnum.GAMEMOVE) {
                         sendMove(request.getJsonData());
                     } else if (request.getType() == RequestTypesEnum.EXIT) {
-                        try {
-                            DataAccessLayer.setOnline(threadOwner, 0);
-                            broadcast();
-                        } catch (SQLException ex) {
-                           ex.printStackTrace();
-                        }
+                        
                         removeConnection();
                     } else if (request.getType() == RequestTypesEnum.AVALIBALE) {
                         setAvalible(request.getJsonData());
@@ -84,6 +79,17 @@ public class AuthHandler extends Thread {
                         try {
                             int score = parseInt(request.getJsonData());
                             DataAccessLayer.updateScore(threadOwner, score);
+                            broadcast();
+                           
+               } catch (SQLException ex) {
+                           ex.printStackTrace();
+                        }
+                        
+                    }
+                    else if (request.getType() == RequestTypesEnum.UPDATEGAMEPLAYED) {
+                        try {
+                            int numberOfGames = parseInt(request.getJsonData());
+                            DataAccessLayer.updateGamesPlayed(threadOwner, numberOfGames);
                             broadcast();
                            
                } catch (SQLException ex) {
@@ -102,11 +108,11 @@ public class AuthHandler extends Thread {
     private void register(String receivedJson) {
         UserModel user = JsonUtils.jsonToUserModel(receivedJson);
         System.out.println("Deserialized UserModel: " + user.getUserName());
-        AuthHandler.clientsVector.add(this);
+        
         ResponseModel response = DataAccessLayer.register(user);
         if(response.getStatus()==Consts.STATUS_SUCCESS){
              try {
-            
+            AuthHandler.clientsVector.add(this);
             DataAccessLayer.setOnline(threadOwner, Consts.ONLINE);
             broadcast();
         } catch (SQLException ex) {
