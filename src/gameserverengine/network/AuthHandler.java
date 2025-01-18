@@ -64,10 +64,16 @@ public class AuthHandler extends Thread {
                         reciveClientRequest(request.getJsonData());
                     } else if (request.getType() == RequestTypesEnum.CONFIRM_INVITATION) {
                         startGame(request.getJsonData());
+                        
 
                     } else if (request.getType() == RequestTypesEnum.GAMEMOVE) {
                         sendMove(request.getJsonData());
                     } else if (request.getType() == RequestTypesEnum.EXIT) {
+                        try {
+                            DataAccessLayer.setOnline(threadOwner, 0);
+                        } catch (SQLException ex) {
+                           ex.printStackTrace();
+                        }
                         removeConnection();
                     }
 
