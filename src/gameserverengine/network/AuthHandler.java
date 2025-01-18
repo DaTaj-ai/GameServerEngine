@@ -1,5 +1,6 @@
 package gameserverengine.network;
 
+import gameserverengine.GameServerController;
 import gameserverengine.enums.RequestTypesEnum;
 import gameserverengine.local.DataAccessLayer;
 import gameserverengine.models.GameModel;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.stage.Stage;
 import piratesproject.models.InvitationModel;
 
 public class AuthHandler extends Thread {
@@ -67,6 +69,8 @@ public class AuthHandler extends Thread {
                         sendMove(request.getJsonData());
                     } else if (request.getType() == RequestTypesEnum.EXIT) {
                         removeConnection();
+                    } else if (request.getType() == RequestTypesEnum.AVALIBALE) {
+                        setAvalible(request.getJsonData());
                     }
 
                 }
@@ -96,9 +100,12 @@ public class AuthHandler extends Thread {
         outputWriter.println(responseJson);
         System.out.println("Response sent to client as JSON: " + responseJson);
         threadOwner = user.getUserName();
+        Stage stage = null;
+        GameServerController gameServerController = new GameServerController(stage);
+        gameServerController.setgraphstate();
         try {
-              String userName = user.getUserName() ; 
-              DataAccessLayer.setOnline(userName, Consts.ONLINE);
+            String userName = user.getUserName();
+            DataAccessLayer.setOnline(userName, Consts.ONLINE);
         } catch (SQLException ex) {
             Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -124,29 +131,48 @@ public class AuthHandler extends Thread {
         sendInvitation(JsonUtils.jsonToInvitationModel(receivedJson));
     }
 
+    public AuthHandler findRecipientHandler(String recipient) {
+        for (AuthHandler handler : clientsVector) {
+            if (handler.getThreadOwner().equals(recipient)) {
+                return handler;
+            }
+        }
+        return null;
+    }
+
     public void sendInvitation(InvitationModel invitation) {
         System.out.println(JsonUtils.invitationModelToJson(invitation));
-        for (AuthHandler handler : clientsVector) {
-            if (handler.getThreadOwner().equals(invitation.getTo())) {
-                ResponseModel response = new ResponseModel(1, "invitation", invitation.getFrom(),
-                        RequestTypesEnum.RECIEVE_INVITATION);
-                String responseJson = JsonUtils.responseModelToJson(response);
-                handler.outputWriter.println(responseJson);
-                System.out.println("7777777777");
-                break;
-            }
+
+        AuthHandler recipientHandler = findRecipientHandler(invitation.getTo());
+        if (recipientHandler != null) {
+            ResponseModel response = new ResponseModel(
+                    1,
+                    "invitation",
+                    invitation.getFrom(),
+                    RequestTypesEnum.RECIEVE_INVITATION
+            );
+
+            String responseJson = JsonUtils.responseModelToJson(response);
+            recipientHandler.outputWriter.println(responseJson);
+
+            System.out.println("Invitation sent successfully.");
+        } else {
+            System.out.println("Recipient not found.");
         }
     }
 
     public void removeConnection() {
         try {
-            System.out.println("User : "+threadOwner+" logged out !!");
+            DataAccessLayer.setOnline(threadOwner, 0);
+            System.out.println("User : " + threadOwner + " logged out !!");
             clientsVector.remove(this);
             this.stop();
             outputWriter.close();
             inputReader.close();
             clientSocket.close();
         } catch (IOException ex) {
+            Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(AuthHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -161,7 +187,7 @@ public class AuthHandler extends Thread {
         ResponseModel response = new ResponseModel(1, "", data, RequestTypesEnum.GAMEMOVE);
         String responseJson = JsonUtils.responseModelToJson(response);
         handler.outputWriter.println(responseJson);
-        
+
     }
 
     public void startGame(String receivedJson) {
@@ -208,4 +234,8 @@ public class AuthHandler extends Thread {
         }
     }
 
+    private void setAvalible(String receivedJson) {
+        int value = Integer.parseInt(receivedJson);
+        DataAccessLayer.setAvilableStatus(threadOwner,value);
+    }
 }
