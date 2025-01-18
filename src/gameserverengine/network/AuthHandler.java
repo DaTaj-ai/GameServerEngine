@@ -1,5 +1,6 @@
 package gameserverengine.network;
 
+import gameserverengine.GameServerController;
 import gameserverengine.enums.RequestTypesEnum;
 import gameserverengine.local.DataAccessLayer;
 import gameserverengine.models.GameModel;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.stage.Stage;
 import piratesproject.models.InvitationModel;
 
 public class AuthHandler extends Thread {
@@ -96,6 +98,9 @@ public class AuthHandler extends Thread {
         outputWriter.println(responseJson);
         System.out.println("Response sent to client as JSON: " + responseJson);
         threadOwner = user.getUserName();
+        Stage stage = null;
+        GameServerController gameServerController = new GameServerController(stage);
+        gameServerController.setgraphstate();
         try {
               String userName = user.getUserName() ; 
               DataAccessLayer.setOnline(userName, Consts.ONLINE);

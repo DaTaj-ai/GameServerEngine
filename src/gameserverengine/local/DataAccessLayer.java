@@ -127,15 +127,16 @@ public class DataAccessLayer implements LocalDatabaseFunctions {
 
     public static void setOnline(String username, int status) throws SQLException {
         if (status == 1) {
-            PreparedStatement stmnt = connection.prepareStatement("UPDATE USERTABLE SET isOnline = 1 WHERE username = ?");
+            PreparedStatement stmnt = connection.prepareStatement("UPDATE UsersTable SET isOnline = 1 WHERE username = ?");
             stmnt.setString(1, username);
-            stmnt.executeQuery();
+            stmnt.executeUpdate();
         }
         else if (status == 0){
-            PreparedStatement stmnt = connection.prepareStatement("UPDATE USERTABLE SET isOnline = 0 WHERE username = ?");
+            PreparedStatement stmnt = connection.prepareStatement("UPDATE UsersTable SET isOnline = 0 WHERE username = ?");
             stmnt.setString(1, username);
-            stmnt.executeQuery();
+            stmnt.executeUpdate();
         }
+        
     }
 
     public static ArrayList<UserModel> getOnlinePlayer() {
