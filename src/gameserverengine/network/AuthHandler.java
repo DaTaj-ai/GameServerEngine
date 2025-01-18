@@ -239,8 +239,8 @@ public class AuthHandler extends Thread {
         String game = JsonUtils.gameRoomModelToJson(model);
         ResponseModel response = new ResponseModel(1, "", game, RequestTypesEnum.CREATE_ROOM);
         String responseJson = JsonUtils.responseModelToJson(response);
-        DataAccessLayer.setAvilableStatus(user1, 0);
-        DataAccessLayer.setAvilableStatus(user2, 0);
+        DataAccessLayer.setAvilableStatus(user1, 1);
+        DataAccessLayer.setAvilableStatus(user2, 1);
         h1.outputWriter.println(responseJson);
         h2.outputWriter.println(responseJson);
     }
