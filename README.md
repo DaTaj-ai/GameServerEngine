@@ -31,10 +31,10 @@ Follow these steps to set up the **GameServerEngine** locally:
 
 - Java Development Kit (JDK) 8
   - Libraries:
-    - sqlite-jdbc-3.46.0.0.jar [[https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc/3.46.0.0](https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc/3.46.0.0)]
-    - slf4j-simple-2.0.7.jar [[https://repo1.maven.org/maven2/org/slf4j/slf4j-simple/2.0.7/](https://repo1.maven.org/maven2/org/slf4j/slf4j-simple/2.0.7/)]
-    - slf4j-api-2.0.7.jar [[https://mvnrepository.com/artifact/org.slf4j/slf4j-api/2.0.7](https://mvnrepository.com/artifact/org.slf4j/slf4j-api/2.0.7)]
-    - gson-2.10.1.jar [[https://mvnrepository.com/artifact/com.google.code.gson/gson/2.10.1](https://mvnrepository.com/artifact/com.google.code.gson/gson/2.10.1)]
+    - (sqlite-jdbc-3.46.0.0.jar)[[https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc/3.46.0.0](https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc/3.46.0.0)]
+    - (slf4j-simple-2.0.7.jar)[[https://repo1.maven.org/maven2/org/slf4j/slf4j-simple/2.0.7/](https://repo1.maven.org/maven2/org/slf4j/slf4j-simple/2.0.7/)]
+    - (slf4j-api-2.0.7.jar)[[https://mvnrepository.com/artifact/org.slf4j/slf4j-api/2.0.7](https://mvnrepository.com/artifact/org.slf4j/slf4j-api/2.0.7)]
+    - (gson-2.10.1.jar)[[https://mvnrepository.com/artifact/com.google.code.gson/gson/2.10.1](https://mvnrepository.com/artifact/com.google.code.gson/gson/2.10.1)]
 
 ### Steps
 
